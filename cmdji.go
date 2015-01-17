@@ -45,14 +45,18 @@ func main() {
 
 	// check date to match today (match time zone of server)
 
+	fmt.Println(k.Max_newspaper_rank())
 	fmt.Println(k.Kanji.Kanji)
 }
 
 func upToDate(contents []byte) bool {
-
 	past_kanji := cmdji.OpenKanji(contents)
 	past_kanji.UnJson()
-	fmt.Println("date", past_kanji.Kanji.Published_at)
-	fmt.Println(time.Now())
+
+	fmt.Println("date", past_kanji.Date())
+	year, month, day := time.Now().Date()
+
+	fmt.Printf("Today: %d %d %d\n", year, month, day)
+
 	return true
 }

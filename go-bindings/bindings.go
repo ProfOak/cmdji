@@ -1,8 +1,5 @@
 package cmdji
 
-/*
-	Make .kanji_today file for current day's kanji notes, so you don't have to check for new kanji every time you open the term
-*/
 import (
 	"encoding/json"
 	"io/ioutil"
@@ -11,18 +8,13 @@ import (
 	"fmt"
 )
 
-func Kanji() KanjiADay {
-	var k KanjiADay
-	return k
-}
-
-func OpenKanji(b []byte) KanjiADay {
-	var k KanjiADay
-	json_blob = b
-	return k
-}
-
 var json_blob []byte
+
+type Compound struct {
+	KanjiCompound    string
+	KanaCompound     string
+	CompoundMeanings []string
+}
 
 type kanjiStruct struct {
 	Kanji              string        `json:"kanji"`
@@ -46,6 +38,17 @@ type KanjiADay struct {
 	Home_url string      `json:"home_url"`
 }
 
+func Kanji() KanjiADay {
+	var k KanjiADay
+	return k
+}
+
+func OpenKanji(b []byte) KanjiADay {
+	var k KanjiADay
+	json_blob = b
+	return k
+}
+
 func (k *KanjiADay) Print() {
 	// sanity test
 	fmt.Println("Kanji:", k.Kanji.Kanji)
@@ -67,6 +70,7 @@ func (k *KanjiADay) Print() {
 }
 
 func (k *KanjiADay) Update() {
+	// retrieve from website
 	const url = "http://one.kanji.website/api/v1/today.json"
 	res, err := http.Get(url)
 	if err != nil {
@@ -79,14 +83,82 @@ func (k *KanjiADay) Update() {
 	}
 
 }
-func (k *KanjiADay) RawJson() []byte {
-	return json_blob
-}
-func (k *KanjiADay) UnJson() {
 
+func (k *KanjiADay) UnJson() {
+	// take json blob and unmarshal it
+	// TODO: Check for len > 0
+	// Update or OpenKanji must be run before this
 	err := json.Unmarshal(json_blob, &k)
 	if err != nil {
 		fmt.Println("[Fail]", err)
 	}
+}
 
+func (k *KanjiADay) RawJson() []byte {
+	return json_blob
+}
+
+func (k KanjiADay) KanjiCharacter() string {
+	return k.Kanji.Kanji
+}
+
+func (k KanjiADay) Meanings() []string {
+	return k.Kanji.Meanings
+}
+
+func (k KanjiADay) Onyomis() []string {
+	return k.Kanji.Onyomis
+}
+
+func (k KanjiADay) Kunyomis() []string {
+	return k.Kanji.Kunyomis
+}
+
+func (k KanjiADay) Nanoris() []string {
+	return k.Kanji.Nanoris
+}
+
+func (k KanjiADay) Joyo() bool {
+	return k.Kanji.Joyo
+}
+
+func (k KanjiADay) Jlpt() int {
+	return k.Kanji.Jlpt
+}
+
+func (k KanjiADay) Newspaper_rank() int {
+	return k.Kanji.Newspaper_rank
+}
+
+/*
+func (k KanjiADay) On_compounds() []Compound {
+	var c [len(k.Kanji.On_compounds)]Compound
+
+	for i, cmpd := range k.Kanji.On_compounds {
+		c[i].KanjiCompound = cmpd[0]
+		c[i].KanaCompound = cmpd[1]
+		c[i].CompoundMeanings = cmpd[2]
+	}
+
+	return c
+}
+
+func (k KanjiADay) Kun_compounds() []Compound {
+	return k.Kanji.Kun_compounds[0], k.Kanji.Kun_compounds[1], k.Kanji.Kun_compounds[2]
+}
+*/
+
+func (k KanjiADay) Max_newspaper_rank() int {
+	return k.Kanji.Max_newspaper_rank
+}
+
+func (k KanjiADay) Date() string {
+	return k.Kanji.Published_at
+}
+
+func (k KanjiADay) Image() []string {
+	return k.Kanji.Image
+}
+func (k KanjiADay) Source_url() string {
+	return k.Kanji.Source_url
 }
