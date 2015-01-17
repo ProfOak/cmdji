@@ -26,7 +26,6 @@ k.UnJson()
 ```
 func Kanji() KanjiADay {
     initialize and return KanjiADay object
-
 }
 ```
 
@@ -36,7 +35,6 @@ func Kanji() KanjiADay {
 func OpenKanji(raw_json []bytes) KanjiADay {
     store json blob in unexported field
     initialize and return KanjiADay object
-
 }
 ```
 
@@ -113,6 +111,7 @@ func (k KanjiADay) Nanoris() []string {
 ```
 func (k KanjiADay) Joyo() bool {
     return true if it's a joyo kanji
+}
 ```
 
 **Jlpt**
@@ -131,7 +130,7 @@ func (k KanjiADay) Newspaper_rank() int {
 }
 ````
 
-****
+**Max_newspaper_rank**
 ```
 func (k KanjiADay) Max_newspaper_rank() int {
     return max newspaper rank
