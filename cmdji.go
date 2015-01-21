@@ -5,6 +5,8 @@ import (
 	"github.com/ProfOak/cmdji/go-bindings"
 	"io/ioutil"
 	"os/user"
+	"strconv"
+	"strings"
 	"time"
 )
 
@@ -45,7 +47,6 @@ func main() {
 
 	// check date to match today (match time zone of server)
 
-	fmt.Println(k.Max_newspaper_rank())
 	fmt.Println(k.Kanji.Kanji)
 }
 
@@ -53,10 +54,22 @@ func upToDate(contents []byte) bool {
 	past_kanji := cmdji.OpenKanji(contents)
 	past_kanji.UnJson()
 
-	fmt.Println("date", past_kanji.Date())
-	year, month, day := time.Now().Date()
+	date_raw := past_kanji.Date()
 
-	fmt.Printf("Today: %d %d %d\n", year, month, day)
+	// date_raw    = []string{date, time}
+	// date_raw[0] = []string{year, month, day}
+	old_date := strings.Split(strings.Split(date_raw, "T")[0], "-")
 
+	old_year, _ := strconv.Atoi(old_date[0])
+	old_month, _ := strconv.Atoi(old_date[1])
+	old_day, _ := strconv.Atoi(old_date[2])
+
+	// kanji a day uses UTC time
+	// updates at midnight
+	year, month, day := time.Now().UTC().Date()
+
+	if year != old_year || int(month) != old_month || day != old_day {
+		return false
+	}
 	return true
 }
