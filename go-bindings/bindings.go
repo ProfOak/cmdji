@@ -17,20 +17,20 @@ type Compound struct {
 }
 
 type kanjiStruct struct {
-	Kanji              string        `json:"kanji"`
-	Meanings           []string      `json:"meanings"`
-	Onyomis            []string      `json:"onyomis"`
-	Kunyomis           []string      `json:"kunyomis`
-	Nanoris            []string      `json:"nanoris"`
-	Joyo               bool          `json:"joyo"`
-	Jlpt               int           `json:"jlpt"`
-	Newspaper_rank     int           `json:"newspaper_rank"`
-	On_compounds       []interface{} `json:"on_compounds"`
-	Kun_compounds      []interface{} `json:"kun_compounds"`
-	Max_newspaper_rank int           `json:"max_newspaper_rank"`
-	Published_at       string        `json:"published_at"`
-	Image              []string      `json:"image"`
-	Source_url         string        `json:"source_url"`
+	Kanji              string          `json:"kanji"`
+	Meanings           []string        `json:"meanings"`
+	Onyomis            []string        `json:"onyomis"`
+	Kunyomis           []string        `json:"kunyomis`
+	Nanoris            []string        `json:"nanoris"`
+	Joyo               bool            `json:"joyo"`
+	Jlpt               int             `json:"jlpt"`
+	Newspaper_rank     int             `json:"newspaper_rank"`
+	On_compounds       [][]interface{} `json:"on_compounds"`
+	Kun_compounds      [][]interface{} `json:"kun_compounds"`
+	Max_newspaper_rank int             `json:"max_newspaper_rank"`
+	Published_at       string          `json:"published_at"`
+	Image              []string        `json:"image"`
+	Source_url         string          `json:"source_url"`
 }
 
 type KanjiADay struct {
@@ -130,23 +130,56 @@ func (k KanjiADay) Newspaper_rank() int {
 	return k.Kanji.Newspaper_rank
 }
 
-/*
 func (k KanjiADay) On_compounds() []Compound {
-	var c [len(k.Kanji.On_compounds)]Compound
+	comps := make([]Compound, 0)
+	for _, i := range k.Kanji.On_compounds {
 
-	for i, cmpd := range k.Kanji.On_compounds {
-		c[i].KanjiCompound = cmpd[0]
-		c[i].KanaCompound = cmpd[1]
-		c[i].CompoundMeanings = cmpd[2]
+		x := i[0].(string)     // kanji reading
+		y := i[1].(string)     // kana reading
+		z := make([]string, 0) // meanings
+
+		for _, j := range i[2].([]interface{}) {
+			// collect all the meanings
+			z = append(z, j.(string))
+		}
+
+		// build Compound struct
+		var c Compound
+		c.KanjiCompound = x
+		c.KanaCompound = y
+		c.CompoundMeanings = z
+
+		// collect all Compound structs, for returning
+		comps = append(comps, c)
 	}
 
-	return c
+	return comps
 }
 
 func (k KanjiADay) Kun_compounds() []Compound {
-	return k.Kanji.Kun_compounds[0], k.Kanji.Kun_compounds[1], k.Kanji.Kun_compounds[2]
+	comps := make([]Compound, 0)
+	for _, i := range k.Kanji.Kun_compounds {
+
+		x := i[0].(string)     // kanji reading
+		y := i[1].(string)     // kana reading
+		z := make([]string, 0) // meanings
+
+		for _, j := range i[2].([]interface{}) {
+			// collect all the meanings
+			z = append(z, j.(string))
+		}
+
+		// build Compound struct
+		var c Compound
+		c.KanjiCompound = x
+		c.KanaCompound = y
+		c.CompoundMeanings = z
+
+		// collect all Compound structs, for returning
+		comps = append(comps, c)
+	}
+	return comps
 }
-*/
 
 func (k KanjiADay) Max_newspaper_rank() int {
 	return k.Kanji.Max_newspaper_rank

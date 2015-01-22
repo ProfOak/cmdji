@@ -45,8 +45,6 @@ func main() {
 	k.UnJson()
 	//k.Print()
 
-	// check date to match today (match time zone of server)
-
 	fmt.Println(k.Kanji.Kanji)
 }
 
