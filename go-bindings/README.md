@@ -16,14 +16,14 @@ k.UnJson()
 
 * **Kanji** - type kanjiStruct 
   * kanjiStruct is not exported. There is no reason to have a kanjiStruct structure because of the json blob layout.
-  * **HomeUrl** - string
-    * url of the website (http://one.kanji.website)
-      
-      **Compound** - struct
+* **HomeUrl** - string
+  * url of the website (http://one.kanji.website)
+  
+* **Compound** - struct
 
-      * **KanjiCompound** - string
-      * **KanaCompound** - string
-      * **CompoundMeanings** - []string
+  * **KanjiCompound** - string
+  * **KanaCompound** - string
+  * **CompoundMeanings** - []string
 
 ## Exported methods
 
@@ -31,7 +31,7 @@ k.UnJson()
 
 ```
 func Kanji() KanjiADay {
-        initialize and return KanjiADay object
+    initialize and return KanjiADay object
 
 }
 ```
@@ -40,8 +40,8 @@ func Kanji() KanjiADay {
 
 ```
 func OpenKanji(raw_json []bytes) KanjiADay {
-        store json blob in unexported field
-            initialize and return KanjiADay object
+    store json blob in unexported field
+    initialize and return KanjiADay object
 
 }
 ```
@@ -51,8 +51,8 @@ func OpenKanji(raw_json []bytes) KanjiADay {
 
 ```
 func (k &KanjiADay) Update() {
-        GET requst for json blob
-            store json blob in unexported field
+    GET requst for json blob
+    store json blob in unexported field
 }
 
 ```
@@ -61,130 +61,130 @@ func (k &KanjiADay) Update() {
 
 ```
 func (k &KanjiADay) Unjson() {
-        Take json blob, parse and store in k
-            For use after Update() or OpenKanji()
+    Take json blob, parse and store in k
+    For use after Update() or OpenKanji()
 }
 ```
 
 **RawJson** 
  
- ```
- func (k *KanjiADay) RawJson() []byte {
-         return raw json blob
- }
- ```
+```
+func (k *KanjiADay) RawJson() []byte {
+    return raw json blob
+}
+```
 
-  **KanjiCharacter**
+ **KanjiCharacter**
 
-  ```
-  func (k KanjiADay) KanjiCharacter() string {
-          return kanji character of the day
-  }
-  ```
+```
+func (k KanjiADay) KanjiCharacter() string {
+    return kanji character of the day
+}
+```
 
 
-  **Meanings**
-  ```
-  func (k KanjiADay) Meanings() []string {
-          return array of meanings for kanji character
-  }
-  ```
+**Meanings**
+```
+func (k KanjiADay) Meanings() []string {
+    return array of meanings for kanji character
+}
+```
 
-  **Onyomis**
+**Onyomis**
 
-  ```
-  func (k KanjiADay) Onyomis() []string {
-          return list of on'yomi readings
-  }
-  ```
+```
+func (k KanjiADay) Onyomis() []string {
+    return list of on'yomi readings
+}
+```
 
-  **Kunyomis**
+**Kunyomis**
 
-  ```
-  func (k KanjiADay) Kunyomis() []string {
-          return list of kun'yomi readings
-  }
-  ```
+```
+func (k KanjiADay) Kunyomis() []string {
+    return list of kun'yomi readings
+}
+```
 
-  **Nanoris**
+**Nanoris**
 
-  ```
-  func (k KanjiADay) Nanoris() []string {
-          return list of nanori readings
-  }
-  ```
+```
+func (k KanjiADay) Nanoris() []string {
+    return list of nanori readings
+}
+```
 
-  **On_compounds**
+**On_compounds**
 
-  ```
-  func (k KanjiADay) On_compounds() []Compound {
-          return an array of populated Compound structs
-  }
-  ```
+```
+func (k KanjiADay) On_compounds() []Compound {
+    return an array of populated Compound structs
+}
+```
 
-  **Kun_compounds**
+**Kun_compounds**
 
-  ```
-  func (k KanjiADay) Kun_compounds() []Compound {
-          return an array of populated Compound structs
-  }
-  ```
+```
+func (k KanjiADay) Kun_compounds() []Compound {
+    return an array of populated Compound structs
+}
+```
 
-  **Joyo**
+**Joyo**
 
-  ```
-  func (k KanjiADay) Joyo() bool {
-          return true if it's a joyo kanji
-  }
-  ```
+```
+func (k KanjiADay) Joyo() bool {
+    return true if it's a joyo kanji
+}
+```
 
-  **Jlpt**
+**Jlpt**
 
-  ```
-  func (k KanjiADay) Jlpt() int {
-          return jlpt level
-  }
-  ```
+```
+func (k KanjiADay) Jlpt() int {
+    return jlpt level
+}
+```
 
-  **Newspaper_rank**
+**Newspaper_rank**
 
-  ```
-  func (k KanjiADay) Newspaper_rank() int {
-          return newspaper ranking
-  }
-  ````
+```
+func (k KanjiADay) Newspaper_rank() int {
+    return newspaper ranking
+}
+````
 
-  **Max_newspaper_rank**
-  ```
-  func (k KanjiADay) Max_newspaper_rank() int {
-          return max newspaper rank
-  }
-  ```
+**Max_newspaper_rank**
+```
+func (k KanjiADay) Max_newspaper_rank() int {
+    return max newspaper rank
+}
+```
 
-  **Date**
+**Date**
 
-  ```
-  func (k KanjiADay) Date() string {
-          return the date the kanji of the day was from
-  }
-  ```
+```
+func (k KanjiADay) Date() string {
+    return the date the kanji of the day was from
+}
+```
 
-  **Image**
+**Image**
 
-  ```
-  func (k KanjiADay) Image() []string {
-          return the two URLs related to the kanji
-              [
-                      direct image link,
-                              link to image's flicker page
-                                  ]
-  }
-  ```
+```
+func (k KanjiADay) Image() []string {
+    return the two URLs related to the kanji
+    [
+        direct image link,
+        link to image's flicker page
+    ]
+}
+```
 
-  **Source_url**
+**Source_url**
 
-  ```
-  func (k KanjiADay) Source_url() string {
-          return the date's source url for the kanji
-  }
-  ```
+```
+func (k KanjiADay) Source_url() string {
+    return the date's source url for the kanji
+}
+```

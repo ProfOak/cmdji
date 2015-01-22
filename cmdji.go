@@ -11,16 +11,13 @@ import (
 )
 
 func main() {
-	// open file .kanji_today
-	// throw in json.Unmarshal
-	// check date - make date function
-	// if date > .kanji_today date,
-
+	// get home dir
 	usr, err := user.Current()
 	if err != nil {
 		fmt.Println(err)
 	}
 
+	// .kanji_today in home dir
 	kanji_today_filename := usr.HomeDir + "/.kanji_today"
 
 	// file to store today's kanji
@@ -32,7 +29,6 @@ func main() {
 	// first time running, or not up to date
 	if err != nil || !upToDate(contents) {
 		// file not found/make file
-		fmt.Println("UPDATING")
 		k = cmdji.Kanji()
 		k.Update()
 		ioutil.WriteFile(kanji_today_filename, k.RawJson(), 0744)
@@ -43,12 +39,24 @@ func main() {
 
 	// ready to use kanjiaday variable
 	k.UnJson()
-	//k.Print()
 
-	fmt.Println(k.Kanji.Kanji)
+	// nicer printing
+	str := k.KanjiCharacter() + "\n"
+	str += strings.Join(k.Meanings(), ", ") + " "
+	str += "JLPT: " + strconv.Itoa(k.Jlpt()) + "\n"
+
+	str += "Kun'yomi: "
+	str += strings.Join(k.Kunyomis(), ",") + " | "
+
+	str += "On'yomi: "
+	str += strings.Join(k.Onyomis(), ",")
+	fmt.Println(str)
+	//k.Print()
 }
 
 func upToDate(contents []byte) bool {
+
+	// check json blob from .kanji_todau file
 	past_kanji := cmdji.OpenKanji(contents)
 	past_kanji.UnJson()
 

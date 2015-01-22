@@ -2,10 +2,9 @@ package cmdji
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
-	//"strings"
-	"fmt"
 )
 
 var json_blob []byte
@@ -51,21 +50,21 @@ func OpenKanji(b []byte) KanjiADay {
 
 func (k *KanjiADay) Print() {
 	// sanity test
-	fmt.Println("Kanji:", k.Kanji.Kanji)
-	fmt.Println("Meanings:", k.Kanji.Meanings)
-	fmt.Println("Onyomis:", k.Kanji.Onyomis)
-	fmt.Println("Kunyomis:", k.Kanji.Kunyomis)
-	fmt.Println("Nanoris:", k.Kanji.Nanoris)
-	fmt.Println("Joyo:", k.Kanji.Joyo)
-	fmt.Println("Jlpt:", k.Kanji.Jlpt)
-	fmt.Println("Newspaper_ran:", k.Kanji.Newspaper_rank)
-	fmt.Println("On_compounds:", k.Kanji.On_compounds)
-	fmt.Println("Kun_compounds:", k.Kanji.Kun_compounds)
-	fmt.Println("Max_newspaper_ran:", k.Kanji.Max_newspaper_rank)
-	fmt.Println("Published_at:", k.Kanji.Published_at)
-	fmt.Println("Image:", k.Kanji.Image)
-	fmt.Println("Source_url:", k.Kanji.Source_url)
-	fmt.Println("Home_url:", k.Home_url)
+	fmt.Println("Kanji:", k.KanjiCharacter())
+	fmt.Println("Meanings:", k.Meanings())
+	fmt.Println("Onyomis:", k.Onyomis())
+	fmt.Println("Kunyomis:", k.Kunyomis())
+	fmt.Println("Nanoris:", k.Nanoris())
+	fmt.Println("Joyo:", k.Joyo())
+	fmt.Println("Jlpt:", k.Jlpt())
+	fmt.Println("Newspaper_ran:", k.Newspaper_rank())
+	fmt.Println("On_compounds:", k.On_compounds())
+	fmt.Println("Kun_compounds:", k.Kun_compounds())
+	fmt.Println("Max_newspaper_ran:", k.Newspaper_rank())
+	fmt.Println("Published_at:", k.Date())
+	fmt.Println("Image:", k.Image())
+	fmt.Println("Source_url:", k.Source_url())
+	fmt.Println("Home_url:", k.Home())
 
 }
 
@@ -192,6 +191,11 @@ func (k KanjiADay) Date() string {
 func (k KanjiADay) Image() []string {
 	return k.Kanji.Image
 }
+
 func (k KanjiADay) Source_url() string {
 	return k.Kanji.Source_url
+}
+
+func (k KanjiADay) Home() string {
+	return k.Home_url
 }
