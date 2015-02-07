@@ -15,6 +15,8 @@ func main() {
 	usr, err := user.Current()
 	if err != nil {
 		fmt.Println(err)
+		// no user, no root, no service
+		return
 	}
 
 	// .kanji_today in home dir
@@ -30,26 +32,40 @@ func main() {
 	if err != nil || !upToDate(contents) {
 		// file not found/make file
 		k = cmdji.Kanji()
-		k.Update()
+		err = k.Update()
+
+		if err != nil {
+			fmt.Println("Cannot retrieve new information from server")
+			return
+		}
+
 		ioutil.WriteFile(kanji_today_filename, k.RawJson(), 0744)
+
 	} else {
 		// already up to date contents in file
 		k = cmdji.OpenKanji(contents)
 	}
 
 	// ready to use kanjiaday variable
-	k.UnJson()
+	err = k.UnJson()
 
 	// nicer printing
 	str := k.KanjiCharacter() + "\n"
 	str += strings.Join(k.Meanings(), ", ") + " "
 	str += "JLPT: " + strconv.Itoa(k.Jlpt()) + "\n"
 
-	str += "Kun'yomi: "
-	str += strings.Join(k.Kunyomis(), ",") + " | "
+	if len(k.Kunyomis()) > 0 {
+		str += "Kun'yomi: "
+		str += strings.Join(k.Kunyomis(), ",")
+	}
+	if len(k.Kunyomis()) > 0 && len(k.Onyomis()) > 0 {
+		str += " | "
+	}
+	if len(k.Onyomis()) > 0 {
+		str += "On'yomi: "
+		str += strings.Join(k.Onyomis(), ",")
+	}
 
-	str += "On'yomi: "
-	str += strings.Join(k.Onyomis(), ",")
 	fmt.Println(str)
 	//k.Print()
 }
@@ -58,7 +74,11 @@ func upToDate(contents []byte) bool {
 
 	// check json blob from .kanji_todau file
 	past_kanji := cmdji.OpenKanji(contents)
-	past_kanji.UnJson()
+	err := past_kanji.UnJson()
+	if err != nil {
+		// malformed json blob in file
+		return false
+	}
 
 	date_raw := past_kanji.Date()
 

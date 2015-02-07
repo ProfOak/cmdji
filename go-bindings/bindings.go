@@ -2,6 +2,7 @@ package cmdji
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -68,29 +69,28 @@ func (k *KanjiADay) Print() {
 
 }
 
-func (k *KanjiADay) Update() {
+func (k *KanjiADay) Update() error {
 	// retrieve from website
 	const url = "http://one.kanji.website/api/v1/today.json"
 	res, err := http.Get(url)
 	if err != nil {
-		fmt.Println(err)
+		return errors.New("Unable to connect to website")
 	}
 	defer res.Body.Close()
-	json_blob, err = ioutil.ReadAll(res.Body)
-	if err != nil {
-		fmt.Println(err)
-	}
+	json_blob, _ = ioutil.ReadAll(res.Body)
 
+	return nil
 }
 
-func (k *KanjiADay) UnJson() {
+func (k *KanjiADay) UnJson() error {
 	// take json blob and unmarshal it
 	// TODO: Check for len > 0
 	// Update or OpenKanji must be run before this
 	err := json.Unmarshal(json_blob, &k)
 	if err != nil {
-		fmt.Println("[Fail]", err)
+		return errors.New("Error: Malformed json blob")
 	}
+	return nil
 }
 
 func (k *KanjiADay) RawJson() []byte {
