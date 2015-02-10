@@ -28,8 +28,9 @@ func main() {
 
 	var k cmdji.KanjiADay
 
+	u2d, err := upToDate(contents)
 	// first time running, or not up to date
-	if err != nil || !upToDate(contents) {
+	if err != nil || !u2d || err != nil {
 		// file not found/make file
 		k = cmdji.Kanji()
 		err = k.Update()
@@ -70,14 +71,16 @@ func main() {
 	//k.Print()
 }
 
-func upToDate(contents []byte) bool {
+func upToDate(contents []byte) (bool, error) {
 
-	// check json blob from .kanji_todau file
+	// check json blob from .kanji_today file
 	past_kanji := cmdji.OpenKanji(contents)
+
+	fmt.Println("fail")
 	err := past_kanji.UnJson()
 	if err != nil {
 		// malformed json blob in file
-		return false
+		return false, err
 	}
 
 	date_raw := past_kanji.Date()
@@ -95,7 +98,7 @@ func upToDate(contents []byte) bool {
 	year, month, day := time.Now().UTC().Date()
 
 	if year != old_year || int(month) != old_month || day != old_day {
-		return false
+		return false, err
 	}
-	return true
+	return true, nil
 }
