@@ -30,14 +30,17 @@ func main() {
 
 	u2d, err := upToDate(contents)
 	// first time running, or not up to date
-	if err != nil || !u2d || err != nil {
+	if err != nil || !u2d {
 		// file not found/make file
+		fmt.Println("Attempting to update from server...")
 		k = cmdji.Kanji()
 		err = k.Update()
 
 		if err != nil {
-			fmt.Println("Cannot retrieve new information from server")
+			fmt.Println("Failed to retrieve new information from server")
 			return
+		} else {
+			fmt.Println("Update successful")
 		}
 
 		ioutil.WriteFile(kanji_today_filename, k.RawJson(), 0744)
@@ -76,7 +79,6 @@ func upToDate(contents []byte) (bool, error) {
 	// check json blob from .kanji_today file
 	past_kanji := cmdji.OpenKanji(contents)
 
-	fmt.Println("fail")
 	err := past_kanji.UnJson()
 	if err != nil {
 		// malformed json blob in file
